@@ -1,10 +1,11 @@
 # tlc-strummer
 
 This is the firmware for T. Chordstrum - USB MIDI chord strummer for Teensy LC and 3.2
+The augmented chords have been replaced by suspended chords
 
 https://hackaday.io/project/25111-t-chordstrum
 
-Chord strummer with a 12x3 keyboard based on the circle of fifths, like the Omnichord. For strumming the chords, a set of eight touch sensitive pads is used. 
+Chord strummer with a 12x3 keyboard based on the circle of fifths, like the Omnichord. For strumming the chords, a set of eight touch sensitive pads is used.
 
 Chords are selected as follows:
 
@@ -20,7 +21,7 @@ Additional chord combinations are
 top+bottom  - major 7th,
 mid+bottom  - minor 7th,
 top+mid     - diminished,
-all three   - augmented
+all three   - suspended
 
 
 Using the T. Chordstrum:
@@ -69,7 +70,3 @@ Settings chart:
 [      ][      ][      ][      ][bac v-][bac 1/0][bac v+][tempo-][bac gat][tempo+][      ][      ]
 
 [      ][      ][      ][      ][rtm v-][rtm 1/0][rtm v+][r pat-][       ][r pat+][      ][      ]
-
-
-
-

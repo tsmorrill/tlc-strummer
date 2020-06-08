@@ -19,7 +19,7 @@ unsigned long currentMillis = 0L;
 unsigned long statusPreviousMillis = 0L;
 
 byte colPin[12]          = {15,20,21,5,6,7,8,9,10,11,12,14};// teensy digital input pins for keyboard columns (just leave unused ones empty)
-byte colNote[12]         = {1,8,3,10,5,0,7,2,9,4,11,6};     // column to note number                                            
+byte colNote[12]         = {1,8,3,10,5,0,7,2,9,4,11,6};     // column to note number
                                                             // column setup for omnichord style (circle of fifths)
                                                             // chord    Db, Ab, Eb, Bb,  F,  C,  G,  D,  A,  E,  B, F#
                                                             // col/note  1,  8,  3, 10,  5,  0,  7,  2,  9,  4, 11,  6
@@ -30,7 +30,7 @@ byte rowPin[3]           = {4,3,2};                         // teensy output pin
 
                                                             // chord type   maj, min, 7th
                                                             // row            0,   1,   2
-                                                            
+
                                                             // chordType 0 to 7, from binary row combinations
                                                             // 0 0 0 silent
                                                             // 0 0 1 maj
@@ -51,13 +51,14 @@ int chordType = 0;             // chord type (maj, min, 7th...)
 
 int chordNote[8][8] = {        // chord notes for each pad/string
   {-1,-1,-1,-1,-1,-1,-1,-1 },  // silent
-  { 0, 4, 7,12,16,19,24,28 },  // maj 
-  { 0, 3, 7,12,15,19,24,27 },  // min 
-  { 0, 3, 6, 9,12,15,18,21 },  // dim 
-  { 0, 4, 7,10,12,16,19,22 },  // 7th 
+  { 0, 4, 7,12,16,19,24,28 },  // maj
+  { 0, 3, 7,12,15,19,24,27 },  // min
+  { 0, 3, 6, 9,12,15,18,21 },  // dim
+  { 0, 4, 7,10,12,16,19,22 },  // 7th
   { 0, 4, 7,11,12,16,19,23 },  // maj7
-  { 0, 3, 7,10,12,15,19,22 },  // m7  
-  { 0, 4, 8,12,16,20,24,28 }   // aug  
+  { 0, 3, 7,10,12,15,19,22 },  // m7
+//  { 0, 4, 8,12,16,20,24,28 }   // aug
+  { 0, 5, 7,12,17,19,24,29 },  // sus 
 };
 
 // SETUP
@@ -90,9 +91,9 @@ void loop() {
               usbMIDI.sendNoteOff(noteNumber, VELOCITY, MIDI_CH);     // send note Off, USB MIDI
           }
           if (!BRIGHT_LED) digitalWrite(LED_PIN, LOW);                // led off for low brightness
-        }  
-        activeNote[scanSensors] = sensedNote;         
-      }  
+        }
+        activeNote[scanSensors] = sensedNote;
+      }
     }
     statusPreviousMillis = currentMillis;                             // reset interval timing
   }
@@ -111,7 +112,7 @@ void readKeyboard() {
         readChordType |= (1 << row);      // set row bit in chord type
       }
     }
-  }  
+  }
   if ((readChord != chord) || (readChordType != chordType)) { // have the values changed since last scan?
     for (int i = 0; i < PADS; i++) {
        noteNumber = START_NOTE + chord + chordNote[chordType][i];
@@ -151,4 +152,3 @@ void enableRow(int row) {
   }
   delayMicroseconds(30); // wait before reading ports (let ports settle after changing)
 }
-

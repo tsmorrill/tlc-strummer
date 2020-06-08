@@ -1,6 +1,6 @@
 //
 //  patterns.h
-//  
+//
 //
 //  Created by Johan Berglund on 2017-05-14.
 //

@@ -5,7 +5,7 @@
 //                                                                     //
 /////////////////////////////////////////////////////////////////////////
 
-//#define MPR121 // Uncomment if using optional MPR121 touch sensor board 
+//#define MPR121 // Uncomment if using optional MPR121 touch sensor board
 
 //Compile with USB Type set to "Serial + MIDI + Audio"
 
@@ -19,7 +19,7 @@
 #endif
 
 // WAV files converted to code by wav2sketch
-// Minipops 7 samples downloaded from http://samples.kb6.de 
+// Minipops 7 samples downloaded from http://samples.kb6.de
 
 #include "AudioSampleBd808w.h"
 #include "AudioSampleBongo2mp7w.h"
@@ -62,7 +62,7 @@ unsigned long stepInterval = 150;   // step interval in ms, one step is a 1/16 n
 
 
 byte colPin[12]          = {15,20,21,5,6,7,8,9,10,11,12,14};// teensy digital input pins for keyboard columns (just leave unused ones empty)
-byte colNote[12]         = {1,8,3,10,5,0,7,2,9,4,11,6};     // column to note number                                            
+byte colNote[12]         = {1,8,3,10,5,0,7,2,9,4,11,6};     // column to note number
                                                             // column setup for omnichord style (circle of fifths)
                                                             // chord    Db, Ab, Eb, Bb,  F,  C,  G,  D,  A,  E,  B, F#
                                                             // col/note  1,  8,  3, 10,  5,  0,  7,  2,  9,  4, 11,  6
@@ -73,7 +73,7 @@ byte rowPin[3]           = {4,3,2};                         // teensy output pin
 
                                                             // chord type   maj, min, 7th
                                                             // row            0,   1,   2
-                                                            
+
                                                             // chordType 0 to 7, from binary row combinations
                                                             // 0 0 0 silent
                                                             // 0 0 1 maj
@@ -95,7 +95,7 @@ byte reverse = 1;              // reverse strumming direction (default setting i
 byte reverse = 0;              // reverse strumming direction
 #endif
 byte backing = 0;              // backing chord on/off 1/0 (default)
-byte rhythm = 0;               // rhythm on/off  
+byte rhythm = 0;               // rhythm on/off
 byte gated = 1;                // gated chords if rhythm on
 byte bass = 1;                 // bassline if rhythm is on
 byte mode = 0;
@@ -109,13 +109,14 @@ int chordType = 0;             // chord type (maj, min, 7th...)
 
 int chordNote[8][16] = {                               //chord notes for each pad/string (up to 16)
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  { 0, 4, 7,12,16,19,24,28,31,36,40,43,48,52,55,60 },  //maj 
-  { 0, 3, 7,12,15,19,24,27,31,36,39,43,48,51,55,60 },  //min 
-  { 0, 3, 6, 9,12,15,18,21,24,27,30,33,36,39,42,45 },  //dim 
-  { 0, 4, 7,10,12,16,19,22,24,28,31,34,36,40,43,46 },  //7th 
+  { 0, 4, 7,12,16,19,24,28,31,36,40,43,48,52,55,60 },  //maj
+  { 0, 3, 7,12,15,19,24,27,31,36,39,43,48,51,55,60 },  //min
+  { 0, 3, 6, 9,12,15,18,21,24,27,30,33,36,39,42,45 },  //dim
+  { 0, 4, 7,10,12,16,19,22,24,28,31,34,36,40,43,46 },  //7th
   { 0, 4, 7,11,12,16,19,23,24,28,31,35,36,40,43,47 },  //maj7
-  { 0, 3, 7,10,12,15,19,22,24,27,31,34,36,39,43,46 },  //m7  
-  { 0, 4, 8,12,16,20,24,28,32,36,40,44,48,52,56,60 }   //aug  
+  { 0, 3, 7,10,12,15,19,22,24,27,31,34,36,39,43,46 },  //m7
+//  { 0, 4, 8,12,16,20,24,28,32,36,40,44,48,52,56,60 }   //aug
+  { 0, 5, 7,12,17,19,24,29,31,36,41,43,48,53,55,60 }   //sus
 };
 
 int chordNoteTers[8][16] = {                               //chord notes for each pad/string (up to 16)
@@ -125,30 +126,30 @@ int chordNoteTers[8][16] = {                               //chord notes for eac
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
   { 0,-8,-2,12, 4,10,24,16,22,36,28,34,48,40,46,60 },  //7th <
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent 
+  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
 };
 
 int chordNoteGrund[8][16] = {                               //chord notes for each pad/string (up to 16)
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  { 0, 4, 7,12,16,19,24,28,31,36,40,43,48,52,55,60 },  //maj 
-  { 0, 3, 7,12,15,19,24,27,31,36,39,43,48,51,55,60 },  //min 
+  { 0, 4, 7,12,16,19,24,28,31,36,40,43,48,52,55,60 },  //maj
+  { 0, 3, 7,12,15,19,24,27,31,36,39,43,48,51,55,60 },  //min
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  { 0, 4,10,12,16,22,24,28,34,36,40,46,48,52,58,60 },  //7th 
+  { 0, 4,10,12,16,22,24,28,34,36,40,46,48,52,58,60 },  //7th
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent  
-  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent 
+  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
+  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
 };
 
 int chordNoteKvint[8][16] = {                               //chord notes for each pad/string (up to 16)
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  { 0, 4,-5,12,16, 7,24,28,19,36,40,31,48,52,43,60 },  //maj 
-  { 0, 3,-5,12,15, 7,24,27,19,36,39,31,48,51,43,60 },  //min 
+  { 0, 4,-5,12,16, 7,24,28,19,36,40,31,48,52,43,60 },  //maj
+  { 0, 3,-5,12,15, 7,24,27,19,36,39,31,48,51,43,60 },  //min
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  { 0, 4,-2,12,16,10,24,28,22,36,40,34,48,52,46,60 },  //7th 
+  { 0, 4,-2,12,16,10,24,28,22,36,40,34,48,52,46,60 },  //7th
   {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
-  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent  
-  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent 
+  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
+  {-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111,-111 },  //silent
 };
 
 float midiToFreq[128];         // for storing pre calculated frequencies for note numbers
@@ -159,7 +160,7 @@ float basLevel = 0.6;          // bassline volume level
 
 #if defined(MPR121)
 uint16_t touchValue;
-Adafruit_MPR121          capTouch = Adafruit_MPR121();      // MPR121 connected to pins otherwise used for built in cap touch 
+Adafruit_MPR121          capTouch = Adafruit_MPR121();      // MPR121 connected to pins otherwise used for built in cap touch
 #else
 byte sensorPin[8]       = {1,0,23,22,19,18,17,16};          // teensy touch input pins
 #endif
@@ -344,7 +345,7 @@ void setup() {
     for (int i = 0; i < 3; i++) {
      pinMode(rowPin[i],OUTPUT);
      digitalWrite(rowPin[i],LOW);
-  }  
+  }
   for(int i=0;i<128;i++) {  // set up table, midi note number to frequency
       midiToFreq[i] = numToFreq(i);
   }
@@ -460,9 +461,9 @@ void loop() {
               internalSineNoteOff(scanSensors);                       // note off for internal audio (fade out)
           }
           if (!BRIGHT_LED) digitalWrite(LED_PIN, LOW);                // led off for low brightness
-        }  
-        activeNote[scanSensors] = sensedNote;         
-      }  
+        }
+        activeNote[scanSensors] = sensedNote;
+      }
     }
     statusPreviousMillis = currentMillis;                             // reset interval timing
   }
@@ -486,7 +487,7 @@ void loop() {
       currentStep++;
       if ((currentStep == 16) || pattern[patNum][currentStep] == 255) currentStep = 0; // start over at step 0 if we passed 15 or next step pattern value is 255 (reset)
     }
-  }  
+  }
   while (usbMIDI.read()) {
     // read & ignore incoming messages
   }
@@ -505,7 +506,7 @@ void readKeyboard() {
         readChordType |= (1 << row);      // set row bit in chord type
       }
     }
-  }  
+  }
   if ((readChord != chord) || (readChordType != chordType)) { // have the values changed since last scan?
     for (int i = 0; i < PADS; i++) {
        if (reverse) {
@@ -530,7 +531,7 @@ void readKeyboard() {
       }
       if ((noteNumber < 128) && (noteNumber > -1) && (omniChordNote(readChordType,i,readChord) > -110)) {    // we don't want to send midi out of range or play silent notes
         if (reverse && ((PADS - 1 - i) < 4)) internalBackingChordOn(noteNumber-12, PADS - 1 - i);
-        if (!reverse && (i < 4)) internalBackingChordOn(noteNumber-12, i); 
+        if (!reverse && (i < 4)) internalBackingChordOn(noteNumber-12, i);
         if (activeNote[i]) {
           digitalWrite(LED_PIN, HIGH);                        // sending midi, so light up led
           usbMIDI.sendNoteOn(noteNumber, VELOCITY, MIDI_CH);  // send Note On, USB MIDI
@@ -565,7 +566,7 @@ void enableRow(int row) {
 
 // MIDI note number to frequency calculation
 float numToFreq(int input) {
-    int number = input - 21; // set to midi note numbers = start with 21 at A0 
+    int number = input - 21; // set to midi note numbers = start with 21 at A0
     number = number - 48; // A0 is 48 steps below A4 = 440hz
     return 440*(pow (1.059463094359,number));
 }
@@ -612,16 +613,16 @@ void playRtm(int i){
       break;
     case 4:
       rtm[i]->play(AudioSampleCowmp7w); // CW
-      break;     
+      break;
     case 5:
       rtm[i]->play(AudioSampleMaracasmp7w); // MA
-      break;  
+      break;
     case 6:
       rtm[i]->play(AudioSampleCymbal1mp7w); // CY
-      break;    
+      break;
     case 7:
       rtm[i]->play(AudioSampleQuijadamp7w); // QU
-      break;           
+      break;
   }
 }
 
@@ -689,7 +690,7 @@ void readSettings() {
         readRow = row;                    // set row bit in chord type
       }
     }
-  }  
+  }
   if ((readKey != prevKey) || (readRow != prevRow)) { // have the values changed since last scan?
     if (readKey > -1) { // if there is a key pressed
       if (readRow == 0) {
@@ -887,4 +888,3 @@ int omniChordNote(int type, int note, int chord){
   } else outnote = chordNote[type][note]; // T.Chordstrum standard note order
   return outnote;
 }
-
