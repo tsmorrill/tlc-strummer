@@ -1,7 +1,7 @@
-# tlc-strummer
+# tlc-strummer-sus-chord
 
 This is the firmware for T. Chordstrum - USB MIDI chord strummer for Teensy LC and 3.2
-The augmented chords have been replaced by suspended chords
+The augmented chords have been replaced by suspended chords.
 
 https://hackaday.io/project/25111-t-chordstrum
 
